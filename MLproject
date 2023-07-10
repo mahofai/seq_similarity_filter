@@ -1,6 +1,6 @@
-name: tutorial
+name: autoML
 
-conda_env: conda.yaml
+conda_env: conda.yml
 
 entry_points:
   main:

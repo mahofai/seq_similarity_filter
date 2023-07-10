@@ -42,7 +42,7 @@ class AutogluonModel(mlflow.pyfunc.PythonModel):
     #     print("Loading context")
     #     # self.predictor = TabularPredictor.load(context.artifacts.get("predictor_path"))
     #     self.predictor = context.artifacts.get("predictor_path")
-    
+
     def predict(self, model_input):
         return self.predictor.predict(model_input)
     
