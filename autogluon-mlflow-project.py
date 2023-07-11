@@ -60,6 +60,11 @@ if __name__ == "__main__":
     one_hot_test_data = one_hot_test_data.iloc[:100]
     concatenated_df  = pd.concat([one_hot_train_data,one_hot_test_data], axis=0)
     
+    alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
+    l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
+    print("alpha",alpha)
+    print("l1_ratio",l1_ratio)
+    
     train_feature_generator = PipelineFeatureGenerator(
         generators=[
             [   one_hot_Generator(verbosity=3,features_in=['seq'],seq_type = "protein"),
