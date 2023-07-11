@@ -105,11 +105,11 @@ if __name__ == "__main__":
 
         
         ## evaluate mode demo
-        val_metrics = loaded_model.evaluate(one_hot_valid_data1)
-        test_metrics = loaded_model.evaluate(one_hot_test_data)
-        for k,v in val_metrics.items():
-            log_metric('valid_'+k, v)
-        for k,v in test_metrics.items():
-            log_metric('test_'+k, v)
+        # val_metrics = loaded_model.evaluate(one_hot_valid_data1)
+        # test_metrics = loaded_model.evaluate(one_hot_test_data)
+        # for k,v in val_metrics.items():
+        #     log_metric('valid_'+k, v)
+        # for k,v in test_metrics.items():
+        #     log_metric('test_'+k, v)
             
         mlflow.end_run()
