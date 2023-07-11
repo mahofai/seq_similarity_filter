@@ -56,7 +56,7 @@ class AutogluonModel(mlflow.pyfunc.PythonModel):
 if __name__ == "__main__":
     one_hot_train_data = TabularDataset('train.csv')
     one_hot_test_data = TabularDataset('test.csv')
-    one_hot_train_data = one_hot_train_data.iloc[:500]
+    one_hot_train_data = one_hot_train_data.iloc[:1000]
     one_hot_test_data = one_hot_test_data.iloc[:100]
     concatenated_df  = pd.concat([one_hot_train_data,one_hot_test_data], axis=0)
     
@@ -96,17 +96,19 @@ if __name__ == "__main__":
     with mlflow.start_run() as run:
 
         predictor = TabularPredictor(label='solubility',eval_metric="precision")
-        predictor.fit(train_data=one_hot_train_data1, tuning_data=one_hot_valid_data1, feature_generator=None, time_limit=60*3)
+        predictor.fit(train_data=one_hot_train_data1, tuning_data=one_hot_valid_data1, feature_generator=None, time_limit=60)
 
-        predictor.leaderboard(one_hot_test_data, silent=True)
+        # predictor.leaderboard(one_hot_test_data, silent=True)
         
-        model = AutogluonModel(predictor)
+        # model = AutogluonModel(predictor)
         
-        model_info = mlflow.pyfunc.log_model(
-            artifact_path='ag-model', python_model=model
-        )
+        # model_info = mlflow.pyfunc.log_model(
+        #     artifact_path='ag-model', python_model=model
+        # )
         
-        loaded_model = mlflow.pyfunc.load_model(model_uri=model_info.model_uri).unwrap_python_model()
+        # predictor.evaluate(one_hot_test_data)
+        
+        # predictor.evaluate(one_hot_valid_data1)
 
         
         ## evaluate mode demo
