@@ -6,5 +6,5 @@ entry_points:
   main:
     parameters:
       alpha: {type: float, default: 0.5}
-      l1_ratio: {type: float, default: 0.1}
-    command: "python autogluon-mlflow-project.py {alpha} {l1_ratio}"
+      time_limit: {type: int, default: 60}
+    command: "python autogluon-mlflow-project.py {alpha} {time_limit}"
