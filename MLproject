@@ -7,4 +7,11 @@ entry_points:
     parameters:
       alpha: {type: float, default: 0.5}
       time_limit: {type: int, default: 60}
+      best_quality: {type: bool, default: False}
+    command: "python autogluon-mlflow-project.py {alpha} {time_limit} {best_quality}"
+
+  validate:
+    parameters:
+      alpha: {type: float, default: 5}
+      time_limit: {type: int, default: 300}
     command: "python autogluon-mlflow-project.py {alpha} {time_limit}"

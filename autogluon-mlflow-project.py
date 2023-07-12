@@ -57,14 +57,18 @@ class AutogluonModel(mlflow.pyfunc.PythonModel):
 if __name__ == "__main__":
     train_data = TabularDataset('train.csv')
     test_data = TabularDataset('test.csv')
-    train_data = train_data.iloc[:1000]
-    test_data = test_data.iloc[:100]
+    train_data = train_data
+    test_data = test_data
     concatenated_df  = pd.concat([train_data,test_data], axis=0)
     
     alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
-    l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
+    time_limit = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
+    best_quality = sys.argv[3] 
+    quality = "medium_quality"
+    if best_quality:
+        quality = "best_quality"
     print("alpha",alpha)
-    print("l1_ratio",l1_ratio)
+    print("time_limit",time_limit)
     
     train_feature_generator = PipelineFeatureGenerator(
         generators=[
@@ -72,6 +76,7 @@ if __name__ == "__main__":
                 IdentityFeatureGenerator(infer_features_in_args=dict(
                     valid_raw_types=[R_INT, R_FLOAT])),
             ],
+            
         ],
         verbosity=3,
         post_drop_duplicates=False,
@@ -89,52 +94,20 @@ if __name__ == "__main__":
     one_hot_train_data1 = one_hot_train_data1.drop(["fold"],axis=1)
     one_hot_valid_data1 = one_hot_valid_data1.drop(["fold"],axis=1)
     
-    alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
-    time_limit = float(sys.argv[2]) if len(sys.argv) > 2 else 1
-    print("alphaP:",alpha)
-    print("time_limit:",time_limit)
-
     print("one_hot_train_data1.shape",one_hot_train_data1.shape)
+    print("one_hot_train_data1.shape",one_hot_valid_data1.shape)
     # print(one_hot_valid_data1)
 
     with mlflow.start_run() as run:
         
-        # tracking_uri = "http://127.0.0.1:5001"
-        # mlflow.set_tracking_uri(tracking_uri)
-        # print(mlflow.get_tracking_uri())
-
         predictor = TabularPredictor(label='solubility',eval_metric="precision")
-        predictor.fit(train_data=one_hot_train_data1, tuning_data=one_hot_valid_data1, feature_generator=None, time_limit=time_limit)
+        predictor.fit(train_data=one_hot_train_data1, tuning_data=one_hot_valid_data1, feature_generator=None, time_limit=time_limit,presets=quality)
         
         evaluation = predictor.evaluate(one_hot_test_data, silent=True)
         print("test eval:",evaluation)
         
-        
-        mlflow.log_param("alpha", alpha)
-        mlflow.log_param("l1_ratio", l1_ratio)
         mlflow.log_metric("precision", evaluation["precision"])
         mlflow.log_metric("auc", evaluation["roc_auc"])
         mlflow.log_metric("mcc", evaluation["precision"])
-
-        # predictor.leaderboard(one_hot_test_data, silent=True)
-        
-        # model = AutogluonModel(predictor)
-        
-        # model_info = mlflow.pyfunc.log_model(
-        #     artifact_path='ag-model', python_model=model
-        # )
-        
-        
-        # predictor.evaluate(one_hot_test_data)
-        
-        # predictor.evaluate(one_hot_valid_data1)
-        
-        ## evaluate mode demo
-        # val_metrics = loaded_model.evaluate(one_hot_valid_data1)
-        # test_metrics = loaded_model.evaluate(one_hot_test_data)
-        # for k,v in val_metrics.items():
-        #     log_metric('valid_'+k, v)
-        # for k,v in test_metrics.items():
-        #     log_metric('test_'+k, v)
             
         mlflow.end_run()
