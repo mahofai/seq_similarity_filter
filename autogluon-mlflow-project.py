@@ -57,8 +57,8 @@ class AutogluonModel(mlflow.pyfunc.PythonModel):
 if __name__ == "__main__":
     train_data = TabularDataset('train.csv')
     test_data = TabularDataset('test.csv')
-    train_data = train_data.iloc[:1000]
-    test_data = test_data.iloc[:200]
+    train_data = train_data
+    test_data = test_data
     concatenated_df  = pd.concat([train_data,test_data], axis=0)
     
     alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
