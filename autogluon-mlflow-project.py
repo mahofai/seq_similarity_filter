@@ -68,46 +68,46 @@ if __name__ == "__main__":
     print("alpha",alpha)
     print("time_limit",time_limit)
     
-    # train_feature_generator = PipelineFeatureGenerator(
-    #     generators=[
-    #         [   one_hot_Generator(verbosity=3,features_in=['seq'],seq_type = "protein"),
-    #             IdentityFeatureGenerator(infer_features_in_args=dict(
-    #                 valid_raw_types=[R_INT, R_FLOAT])),
-    #         ],
+    train_feature_generator = PipelineFeatureGenerator(
+        generators=[
+            [   one_hot_Generator(verbosity=3,features_in=['seq'],seq_type = "protein"),
+                IdentityFeatureGenerator(infer_features_in_args=dict(
+                    valid_raw_types=[R_INT, R_FLOAT])),
+            ],
             
-    #     ],
-    #     verbosity=3,
-    #     post_drop_duplicates=False,
-    #     post_generators=[IdentityFeatureGenerator()]
-    # )
-    # one_hot_all_data = train_feature_generator.fit_transform(X=concatenated_df)
+        ],
+        verbosity=3,
+        post_drop_duplicates=False,
+        post_generators=[IdentityFeatureGenerator()]
+    )
+    one_hot_all_data = train_feature_generator.fit_transform(X=concatenated_df)
     
-    # one_hot_train_data = one_hot_all_data[:len(train_data)]
-    # one_hot_test_data = one_hot_all_data[len(train_data):]
+    one_hot_train_data = one_hot_all_data[:len(train_data)]
+    one_hot_test_data = one_hot_all_data[len(train_data):]
     
-    # # print(concatenated_df)
-    # one_hot_valid_data1 = one_hot_train_data[one_hot_train_data["fold"] ==0.0]
-    # one_hot_train_data1 = one_hot_train_data[one_hot_train_data["fold"] !=0.0]
+    # print(concatenated_df)
+    one_hot_valid_data1 = one_hot_train_data[one_hot_train_data["fold"] ==0.0]
+    one_hot_train_data1 = one_hot_train_data[one_hot_train_data["fold"] !=0.0]
 
-    # one_hot_train_data1 = one_hot_train_data1.drop(["fold"],axis=1)
-    # one_hot_valid_data1 = one_hot_valid_data1.drop(["fold"],axis=1)
+    one_hot_train_data1 = one_hot_train_data1.drop(["fold"],axis=1)
+    one_hot_valid_data1 = one_hot_valid_data1.drop(["fold"],axis=1)
     
-    # print("one_hot_train_data1.shape",one_hot_train_data1.shape)
-    # print("one_hot_valid_data1.shape",one_hot_valid_data1.shape)
-    # # print(one_hot_valid_data1)
+    print("one_hot_train_data1.shape",one_hot_train_data1.shape)
+    print("one_hot_valid_data1.shape",one_hot_valid_data1.shape)
+    # print(one_hot_valid_data1)
 
-    # with mlflow.start_run() as run:
+    with mlflow.start_run() as run:
         
-    #     predictor = TabularPredictor(label='solubility',eval_metric="precision")
-    #     if quality == "medium_quality":
-    #         predictor.fit(train_data=one_hot_train_data1, tuning_data=one_hot_valid_data1, feature_generator=None, time_limit=time_limit,presets=quality,num_cpus=10)
-    #     elif quality == "best_quality":
-    #         predictor.fit(train_data=one_hot_train_data1, feature_generator=None, time_limit=time_limit,presets=quality,num_cpus=10)
-    #     evaluation = predictor.evaluate(one_hot_test_data, silent=True)
-    #     print("test eval:",evaluation)
+        predictor = TabularPredictor(label='solubility',eval_metric="precision")
+        if quality == "medium_quality":
+            predictor.fit(train_data=one_hot_train_data1, tuning_data=one_hot_valid_data1, feature_generator=None, time_limit=time_limit,presets=quality,num_cpus=10)
+        elif quality == "best_quality":
+            predictor.fit(train_data=one_hot_train_data1, feature_generator=None, time_limit=time_limit,presets=quality,num_cpus=10)
+        evaluation = predictor.evaluate(one_hot_test_data, silent=True)
+        print("test eval:",evaluation)
         
-    #     mlflow.log_metric("precision", evaluation["precision"])
-    #     mlflow.log_metric("auc", evaluation["roc_auc"])
-    #     mlflow.log_metric("mcc", evaluation["precision"])
+        mlflow.log_metric("precision", evaluation["precision"])
+        mlflow.log_metric("auc", evaluation["roc_auc"])
+        mlflow.log_metric("mcc", evaluation["precision"])
 
-    #     mlflow.end_run()
+        mlflow.end_run()
