@@ -67,8 +67,6 @@ if __name__ == "__main__":
     print(" !!!!!quality:", quality)
     print("alpha",alpha)
     print("time_limit",time_limit)
-    # print(dasdfsadsf)
-    # print(time_limit21e213123123)
     
     train_feature_generator = PipelineFeatureGenerator(
         generators=[
@@ -97,6 +95,9 @@ if __name__ == "__main__":
     print("one_hot_train_data1.shape",one_hot_train_data1.shape)
     print("one_hot_valid_data1.shape",one_hot_valid_data1.shape)
     # print(one_hot_valid_data1)
+    
+    print(dasdfsadsf)
+    print(time_limit21e213123123)
 
     with mlflow.start_run() as run:
         

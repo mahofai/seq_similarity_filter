@@ -10,8 +10,3 @@ entry_points:
       best_quality: {type: string, enum: ["best_quality", "medium_quality"], default: best_quality}
     command: "python autogluon-mlflow-project.py {alpha} {time_limit} {best_quality}"
 
-  dev:
-    parameters:
-      time_limit: {type: int, default: 300}
-      best_quality: {type: string, enum: ["best_quality", "medium_quality"], default: best_quality}
-    command: "python autogluon-mlflow-project.py {alpha} {time_limit}{best_quality}"
