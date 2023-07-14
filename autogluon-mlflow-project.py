@@ -67,6 +67,8 @@ if __name__ == "__main__":
     print(" !!!!!quality:", quality)
     print("alpha",alpha)
     print("time_limit",time_limit)
+    print(dasdfsadsf)
+    print(time_limit21e213123123)
     
     train_feature_generator = PipelineFeatureGenerator(
         generators=[
